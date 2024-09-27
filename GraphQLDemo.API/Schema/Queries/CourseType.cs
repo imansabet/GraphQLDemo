@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace GraphQLDemo.API.Schema;
+namespace GraphQLDemo.API.Schema.Queries;
 public enum Subject
 {
     Mathematics,
