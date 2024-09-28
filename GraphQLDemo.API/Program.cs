@@ -18,7 +18,7 @@ builder.Services
 
 
 
-builder.Services.AddDbContextFactory<SchoolDbContext>(o => o.UseSqlite(connectionString));
+builder.Services.AddPooledDbContextFactory<SchoolDbContext>(o => o.UseSqlite(connectionString));
 
 var app = builder.Build();
 
