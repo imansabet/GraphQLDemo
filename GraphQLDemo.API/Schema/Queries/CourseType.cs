@@ -1,15 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using GraphQLDemo.API.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GraphQLDemo.API.Schema.Queries;
-public enum Subject
-{
-    Mathematics,
-    Science,
-    History
-}
+
 public class CourseType
 {
-
     public Guid Id { get; set; }
     public string Name { get; set; }
     public Subject Subject { get; set; }

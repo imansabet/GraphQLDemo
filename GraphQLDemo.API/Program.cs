@@ -1,8 +1,13 @@
 using GraphQLDemo.API.Schema.Mutations;
 using GraphQLDemo.API.Schema.Queries;
 using GraphQLDemo.API.Schema.Subscriptions;
+using GraphQLDemo.API.Services;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services
     .AddGraphQLServer()
@@ -13,7 +18,16 @@ builder.Services
 
 
 
+builder.Services.AddDbContextFactory<SchoolDbContext>(o => o.UseSqlite(connectionString));
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<SchoolDbContext>();
+    dbContext.Database.Migrate();
+}
+
 
 
 app.UseRouting();
