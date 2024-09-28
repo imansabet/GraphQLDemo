@@ -11,6 +11,27 @@ public class CoursesRepository
     {
         _contextFactory = contextFactory;
     }
+    public async Task<IEnumerable<CourseDTO>> GetAll()
+    {
+        using (SchoolDbContext context = _contextFactory.CreateDbContext())
+        {
+            return await context.Courses
+                .Include(c => c.Instructor)
+                .Include(c => c.Students)
+                .ToListAsync();
+        }
+    }
+    public async Task<CourseDTO> GetById(Guid courseId)
+    {
+        using (SchoolDbContext context = _contextFactory.CreateDbContext())
+        {
+            return await context.Courses
+                .Include(c => c.Instructor)
+                .Include(c => c.Students)
+                .FirstOrDefaultAsync(c => c.Id == courseId);
+        }
+    }
+
     public async Task<CourseDTO> Create(CourseDTO course)
     {
         using (SchoolDbContext context = _contextFactory.CreateDbContext())
