@@ -35,6 +35,7 @@ public class Query
     {
         _coursesRepository = coursesRepository;
     }
+    [UsePaging(IncludeTotalCount = true,DefaultPageSize = 10)]
     public async Task<IEnumerable<CourseType>> GetCourses()
     {
         IEnumerable<CourseDTO> courseDTOs = await _coursesRepository.GetAll();
