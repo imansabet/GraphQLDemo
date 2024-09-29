@@ -43,7 +43,7 @@ public class Query
             Id = c.Id,
             Name = c.Name,
             Subject = c.Subject,
-           
+            InstructorId = c.InstructorId
         });
     }
     public async Task<CourseType> GetCourseByIdAsync(Guid id)
@@ -54,7 +54,8 @@ public class Query
             Id = courseDTO.Id,
             Name = courseDTO.Name,
             Subject = courseDTO.Subject,
-           
+            InstructorId = courseDTO.InstructorId
+
         };
     }
 

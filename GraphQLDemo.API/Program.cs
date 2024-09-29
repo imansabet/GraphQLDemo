@@ -1,3 +1,4 @@
+using GraphQLDemo.API.DataLoaders;
 using GraphQLDemo.API.Schema.Mutations;
 using GraphQLDemo.API.Schema.Queries;
 using GraphQLDemo.API.Schema.Subscriptions;
@@ -24,6 +25,7 @@ builder.Services.AddPooledDbContextFactory<SchoolDbContext>(o => o.UseSqlite(con
 
 builder.Services.AddScoped<CoursesRepository>();
 builder.Services.AddScoped<InstructorRepository>();
+builder.Services.AddScoped<InstructorDataLoader>();
 
 var app = builder.Build();
 
