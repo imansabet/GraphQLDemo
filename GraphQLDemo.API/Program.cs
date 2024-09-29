@@ -18,7 +18,8 @@ builder.Services
     .AddInMemorySubscriptions()
     .AddMutationType<Mutation>()
     .AddSubscriptionType<Subscription>()
-    .AddFiltering();
+    .AddFiltering()
+    .AddSorting();
 
 
 
