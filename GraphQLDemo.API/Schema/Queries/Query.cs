@@ -47,6 +47,18 @@ public class Query
             InstructorId = c.InstructorId
         });
     }
+    [UseOffsetPaging(IncludeTotalCount = true, DefaultPageSize = 10)]
+    public async Task<IEnumerable<CourseType>> GetOffsetCourses()
+    {
+        IEnumerable<CourseDTO> courseDTOs = await _coursesRepository.GetAll();
+        return courseDTOs.Select(c => new CourseType()
+        {
+            Id = c.Id,
+            Name = c.Name,
+            Subject = c.Subject,
+            InstructorId = c.InstructorId
+        });
+    }
     public async Task<CourseType> GetCourseByIdAsync(Guid id)
     {
         CourseDTO courseDTO = await _coursesRepository.GetById(id);
