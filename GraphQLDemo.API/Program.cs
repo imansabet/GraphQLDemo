@@ -17,7 +17,8 @@ builder.Services
     .AddQueryType<Query>()
     .AddInMemorySubscriptions()
     .AddMutationType<Mutation>()
-    .AddSubscriptionType<Subscription>();
+    .AddSubscriptionType<Subscription>()
+    .AddFiltering();
 
 
 
