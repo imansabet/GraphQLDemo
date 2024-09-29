@@ -55,6 +55,7 @@ public class Query
     [UsePaging(IncludeTotalCount = true, DefaultPageSize = 10)]
     [UseFiltering(typeof(CourseFilterType))]
     [UseSorting(typeof(CourseSortType))]
+    [UseProjection]
     public IQueryable<CourseType> GetPaginatedCourses([ScopedService] SchoolDbContext context )
     {
         return context.Courses.Select(c => new CourseType()

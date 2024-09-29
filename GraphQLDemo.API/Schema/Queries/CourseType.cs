@@ -9,10 +9,11 @@ namespace GraphQLDemo.API.Schema.Queries;
 public class CourseType
 {
     public Guid Id { get; set; }
+    [IsProjected(false)]
     public string Name { get; set; }
     public Subject Subject { get; set; }
 
-    [GraphQLIgnore]
+    [IsProjected(true)]
     public Guid InstructorId { get; set; }
 
     [GraphQLNonNullType]

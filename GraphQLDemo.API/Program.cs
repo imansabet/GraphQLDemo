@@ -19,7 +19,8 @@ builder.Services
     .AddMutationType<Mutation>()
     .AddSubscriptionType<Subscription>()
     .AddFiltering()
-    .AddSorting();
+    .AddSorting()
+    .AddProjections();
 
 
 
