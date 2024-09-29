@@ -15,20 +15,14 @@ public class CoursesRepository
     {
         using (SchoolDbContext context = _contextFactory.CreateDbContext())
         {
-            return await context.Courses
-                .Include(c => c.Instructor)
-                .Include(c => c.Students)
-                .ToListAsync();
+            return await context.Courses.ToListAsync();
         }
     }
     public async Task<CourseDTO> GetById(Guid courseId)
     {
         using (SchoolDbContext context = _contextFactory.CreateDbContext())
         {
-            return await context.Courses
-                .Include(c => c.Instructor)
-                .Include(c => c.Students)
-                .FirstOrDefaultAsync(c => c.Id == courseId);
+            return await context.Courses.FirstOrDefaultAsync(c => c.Id == courseId);
         }
     }
 
