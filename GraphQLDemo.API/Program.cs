@@ -1,3 +1,6 @@
+using FirebaseAdmin;
+using FirebaseAdminAuthentication.DependencyInjection.Extensions;
+using FirebaseAdminAuthentication.DependencyInjection.Models;
 using GraphQLDemo.API.DataLoaders;
 using GraphQLDemo.API.Schema.Mutations;
 using GraphQLDemo.API.Schema.Queries;
@@ -20,8 +23,8 @@ builder.Services
     .AddSubscriptionType<Subscription>()
     .AddFiltering()
     .AddSorting()
-    .AddProjections();
-
+    .AddProjections()
+    .AddAuthorization();
 
 
 builder.Services.AddPooledDbContextFactory<SchoolDbContext>(o => o.UseSqlite(connectionString));
@@ -30,17 +33,24 @@ builder.Services.AddScoped<CoursesRepository>();
 builder.Services.AddScoped<InstructorRepository>();
 builder.Services.AddScoped<InstructorDataLoader>();
 
+builder.Services.AddSingleton(FirebaseApp.Create());
+builder.Services.AddFirebaseAuthentication();
+builder.Services.AddAuthorization
+    (o => o.AddPolicy
+    ("IsAdmin",p => p.RequireClaim(.FirebaseUserClaimType.EMAIL,"Admin@gmail.com")));
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<SchoolDbContext>();
+    var dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<SchoolDbContext>>();
+    var dbContext = dbContextFactory.CreateDbContext();
     dbContext.Database.Migrate();
 }
 
-
-
 app.UseRouting();
+app.UseAuthentication();
 app.UseWebSockets();
 app.MapGraphQL();
 

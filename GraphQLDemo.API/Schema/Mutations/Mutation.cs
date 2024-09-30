@@ -1,10 +1,13 @@
 ﻿using Bogus.DataSets;
+using FirebaseAdminAuthentication.DependencyInjection.Models;
 using GraphQLDemo.API.DTOs;
 using GraphQLDemo.API.Models;
 using GraphQLDemo.API.Schema.Queries;
 using GraphQLDemo.API.Schema.Subscriptions;
 using GraphQLDemo.API.Services.Courses;
+using HotChocolate.Authorization;
 using HotChocolate.Subscriptions;
+using System.Security.Claims;
 
 namespace GraphQLDemo.API.Schema.Mutations;
 
@@ -15,8 +18,15 @@ public class Mutation
     {
         _coursesRepository = coursesRepository;
     }
-    public async Task<CourseResult> CreateCourse(CourseTypeInput courseInput, [Service] ITopicEventSender topicEventSender)
+    [Authorize]
+    public async Task<CourseResult> CreateCourse(CourseTypeInput courseInput, [Service] ITopicEventSender topicEventSender,
+        ClaimsPrincipal claimsPrincipal)
     {
+        string userId =  claimsPrincipal.FindFirstValue(FirebaseUserClaimType.ID);
+        string email =  claimsPrincipal.FindFirstValue(FirebaseUserClaimType.EMAIL);
+        string username =  claimsPrincipal.FindFirstValue(FirebaseUserClaimType.USERNAME);
+        string verified =  claimsPrincipal.FindFirstValue(FirebaseUserClaimType.EMAIL_VERIFIED);
+
         CourseDTO courseDTO = new CourseDTO()
         {
             Name = courseInput.Name,
@@ -35,6 +45,7 @@ public class Mutation
         await topicEventSender.SendAsync(nameof(Subscription.CourseCreated),course);
         return course;
     }
+    [Authorize]
     public async Task<CourseResult> UpdateCourse(Guid id, CourseTypeInput courseInput, [Service] ITopicEventSender topicEventSender)
     {
         CourseDTO courseDTO = new CourseDTO()
@@ -58,6 +69,9 @@ public class Mutation
         await topicEventSender.SendAsync(updateCourseTopic, course);
         return course;
     }
+    
+
+    [Authorize(Policy = "IsAdmin")]
     public async Task<bool> DeleteCourse(Guid id)
     {
         try
